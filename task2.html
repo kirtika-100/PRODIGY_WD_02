@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch Web Application</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(135deg,#1d2671,#c33764);font-family:'Segoe UI',sans-serif;color:#fff;flex-direction:column}
+    .container{text-align:center;background:rgba(0,0,0,0.3);padding:30px 40px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.5)}
+    h1{margin-bottom:20px;font-size:32px}
+    .time{font-size:48px;margin:20px 0;font-weight:bold}
+    .buttons{margin:20px 0}
+    .btn{padding:10px 20px;margin:5px;font-size:16px;border:none;border-radius:5px;cursor:pointer;font-weight:bold;transition:.3s}
+    .btn-start{background:#4caf50;color:#fff}
+    .btn-start:hover{background:#43a047}
+    .btn-pause{background:#ff9800;color:#fff}
+    .btn-pause:hover{background:#fb8c00}
+    .btn-reset{background:#f44336;color:#fff}
+    .btn-reset:hover{background:#e53935}
+    .btn-lap{background:#2196f3;color:#fff}
+    .btn-lap:hover{background:#1e88e5}
+    .laps{margin-top:20px;max-height:200px;overflow-y:auto;text-align:left;width:100%;padding:0 10px}
+    .laps li{background:rgba(255,255,255,0.1);padding:8px;margin:5px 0;border-radius:5px;font-size:16px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Prodigy Infotech Stopwatch</h1>
+    <div class="time" id="display">00:00:00</div>
+    <div class="buttons">
+      <button class="btn btn-start" onclick="start()">Start</button>
+      <button class="btn btn-pause" onclick="pause()">Pause</button>
+      <button class="btn btn-reset" onclick="reset()">Reset</button>
+      <button class="btn btn-lap" onclick="lap()">Lap</button>
+    </div>
+    <ul class="laps" id="laps"></ul>
+  </div>
+  <script>
+    let [hours,minutes,seconds]=[0,0,0]
+    let timer=null
+    let running=false
+    function updateDisplay(){
+      let h=hours<10?"0"+hours:hours
+      let m=minutes<10?"0"+minutes:minutes
+      let s=seconds<10?"0"+seconds:seconds
+      document.getElementById("display").innerText=`${h}:${m}:${s}`
+    }
+    function stopwatch(){
+      seconds++
+      if(seconds===60){seconds=0;minutes++}
+      if(minutes===60){minutes=0;hours++}
+      updateDisplay()
+    }
+    function start(){
+      if(!running){timer=setInterval(stopwatch,1000);running=true}
+    }
+    function pause(){
+      clearInterval(timer)
+      running=false
+    }
+    function reset(){
+      clearInterval(timer)
+      running=false
+      ;[hours,minutes,seconds]=[0,0,0]
+      updateDisplay()
+      document.getElementById("laps").innerHTML=""
+    }
+    function lap(){
+      if(running){
+        let li=document.createElement("li")
+        li.innerText=document.getElementById("display").innerText
+        document.getElementById("laps").appendChild(li)
+      }
+    }
+  </script>
+</body>
+</html>
